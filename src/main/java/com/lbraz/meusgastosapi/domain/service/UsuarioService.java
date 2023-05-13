@@ -59,6 +59,12 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
 
         validarUsuario(dto);
 
+        Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(dto.getEmail());
+
+        if (optionalUsuario.isPresent()) {
+            throw new ResourceBadRequestException("Já existe um usuário cadastrado com o email: " + dto.getEmail());
+        }
+
         Usuario usuario = mapper.map(dto, Usuario.class);
         usuario.setId(null);
         usuario.setDataCadastro(new Date());
@@ -99,6 +105,7 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
         Usuario usuario = optUsuario.get();
 
         usuario.setDataInativacao(new Date());
+        System.out.println("Data da inativação: " + usuario.getDataInativacao());
 
         usuarioRepository.save(usuario);
 
