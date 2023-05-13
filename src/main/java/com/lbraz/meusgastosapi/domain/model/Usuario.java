@@ -1,14 +1,16 @@
 package com.lbraz.meusgastosapi.domain.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Usuario {
-    /*public class Usuario implements UserDetails {
-    }*/
+public class Usuario implements UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,7 +102,7 @@ public class Usuario {
 
 
     //# regiao do framework
-    /*@Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
@@ -133,7 +135,7 @@ public class Usuario {
     @Override
     public boolean isEnabled() {
         return true;
-    }*/
+    }
     //#regiao do framework
 
 }
