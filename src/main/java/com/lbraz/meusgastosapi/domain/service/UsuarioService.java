@@ -54,6 +54,17 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
 
     }
 
+    public UsuarioResponseDto obterPorEmail(String email) {
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isEmpty()) {
+            // lança uma exceção
+            throw new ResourceNotFoundException("Não foi possível encontrar o usuário com o e-mail: " + email);
+        }
+        return mapper.map(optUsuario.get(), UsuarioResponseDto.class);
+
+    }
+
     @Override
     public UsuarioResponseDto cadastrar(UsuarioRequestDto dto) {
 

@@ -69,7 +69,7 @@ public class JwtUtil {
     }
 
     // Método que pega o email do usuário dentro do token
-    public String getUserna(String token){
+    public String getUsername(String token){
         // Obtém as claims do token
         Claims claims = getClaims(token);
 
