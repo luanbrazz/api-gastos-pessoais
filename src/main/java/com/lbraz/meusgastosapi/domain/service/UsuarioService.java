@@ -8,6 +8,7 @@ import com.lbraz.meusgastosapi.dto.usuario.UsuarioRequestDto;
 import com.lbraz.meusgastosapi.dto.usuario.UsuarioResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
 
     @Autowired
     private ModelMapper mapper;
+
+
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UsuarioResponseDto> obterTodos() {
@@ -80,6 +84,8 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
         usuario.setId(null);
         usuario.setDataCadastro(new Date());
         // encoder em senha
+        String senha = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senha);
 
         usuario = usuarioRepository.save(usuario);
 
@@ -94,6 +100,8 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
         validarUsuario(dto);
         Usuario usuario = mapper.map(dto, Usuario.class);
         // encoder em senha
+        String senha = passwordEncoder.encode(dto.getSenha());
+        usuario.setSenha(senha);
 
         usuario.setId(id);
         usuario.setDataInativacao(usuarioBanco.getDataInativacao());
