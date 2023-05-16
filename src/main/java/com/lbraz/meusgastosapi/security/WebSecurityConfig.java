@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                 .cors().and() // Habilita o suporte a CORS
                 .csrf().disable() // Desabilita a proteção CSRF
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(HttpMethod.POST, "/meusgastos/cadastrar-usuario").permitAll() // Permite todas as requisições POST para "/meusgastos/cadastrar-usuario"
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll() // Permite todas as requisições POST para "/meusgastos/cadastrar-usuario"
                         .anyRequest().authenticated()) // Exige autenticação para qualquer outra requisição
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Configura a política de criação de sessão como STATELESS (sem estado)
 
