@@ -11,8 +11,6 @@ import com.lbraz.meusgastosapi.dto.usuario.UsuarioResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -30,8 +28,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private ModelMapper modelMapper;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         super();
@@ -79,7 +75,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         usuarioResponse.setDataCadastro(usuario.getDataCadastro());*/
 
         // Mapeia o objeto Usuario para UsuarioResponseDto
-        UsuarioResponseDto usuarioResponse = modelMapper.map(usuario, UsuarioResponseDto.class);
+//        UsuarioResponseDto usuarioResponse = modelMapper.map(usuario, UsuarioResponseDto.class);
+
+        UsuarioResponseDto usuarioResponse = new UsuarioResponseDto();
+        usuarioResponse.setId(usuario.getId());
+        usuarioResponse.setEmail(usuario.getEmail());
+        usuarioResponse.setNome(usuario.getNome());
+        usuarioResponse.setFoto(usuario.getFoto());
+        usuarioResponse.setDataInativacao(usuario.getDataInativacao());
+        usuarioResponse.setDataCadastro(usuario.getDataCadastro());
 
         // Cria um objeto LoginResponseDto contendo o token e o usuário
         LoginResponseDto loginResponseDto = new LoginResponseDto();

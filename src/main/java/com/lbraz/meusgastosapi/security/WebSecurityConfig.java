@@ -22,6 +22,9 @@ public class WebSecurityConfig {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
+    @Autowired
+    private UserDetailsSecurityServer userDetailsSecurityServer;
+
     // Configura um bean para o BCryptPasswordEncoder
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -48,7 +51,7 @@ public class WebSecurityConfig {
 
         // Adiciona os filtros personalizados JwtAuthenticationFilter e JwtAuthorizationFilter ao HttpSecurity
         http.addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil));
-        http.addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), jwtUtil));
+        http.addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), jwtUtil, userDetailsSecurityServer));
 
         return http.build();
     }

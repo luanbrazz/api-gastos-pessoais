@@ -1,14 +1,10 @@
 package com.lbraz.meusgastosapi.security;
 
 import com.lbraz.meusgastosapi.domain.model.Usuario;
-import com.lbraz.meusgastosapi.domain.service.UsuarioService;
-import com.lbraz.meusgastosapi.dto.usuario.UsuarioResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,15 +16,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private UserDetailsSecurityServer userDetailsSecurityServer;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+                                  UserDetailsSecurityServer userDetailsSecurityServer) {
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
+        this.userDetailsSecurityServer = userDetailsSecurityServer;
     }
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -61,11 +55,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String email = jwtUtil.getUsername(token);
 
             // Obtém o usuário do banco de dados com base no email
-            UsuarioResponseDto usuarioDto = usuarioService.obterPorEmail(email);
+//            UsuarioResponseDto usuarioDto = usuarioService.obterPorEmail(email);
 
             // Mapeia o DTO do usuário para a entidade Usuario
-            Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+//            Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
 
+
+            Usuario usuario = (Usuario) userDetailsSecurityServer.loadUserByUsername(email);
             // Cria uma instância de UsernamePasswordAuthenticationToken com o usuário, nenhuma senha e as autoridades do usuário
             return new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
         }
